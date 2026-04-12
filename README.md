@@ -48,3 +48,18 @@ Frontend (React + Chart.js)
 Backend (FastAPI - Python)
         ↓
 Quantum/Classical Processing (Qiskit + Algorithms)
+```
+
+---
+
+## Estrutura do repositório
+
+| Pasta | Descrição |
+|-------|-----------|
+| [`algorithms/`](algorithms/README.md) | RSA, fatoração clássica, Shor (Qiskit) — lógica partilhada |
+| [`backend/`](backend/README.md) | API FastAPI |
+| [`frontend/`](frontend/README.md) | React, Chart.js |
+| [`docs/`](docs/README.md) | Documentação 
+| [`scripts/`](scripts/README.md) | Automação (setup, dev) |
+
+Cada pasta inclui um **README** com tarefas de implementação e **comandos** sugeridos para executar localmente.
