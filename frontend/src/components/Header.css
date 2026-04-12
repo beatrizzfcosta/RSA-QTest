@@ -1,0 +1,55 @@
+.site-header {
+  background: var(--header-bg);
+  color: var(--header-text);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--palette-indigo) 88%, #000);
+}
+
+.site-header__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.site-header__titles {
+  min-width: 0;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.info-trigger {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--header-text) 45%, transparent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--header-text);
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.info-trigger:hover {
+  background: color-mix(in srgb, var(--header-text) 12%, transparent);
+  border-color: color-mix(in srgb, var(--header-text) 65%, transparent);
+}
+
+.info-trigger:focus-visible {
+  outline: 2px solid var(--header-text);
+  outline-offset: 2px;
+}

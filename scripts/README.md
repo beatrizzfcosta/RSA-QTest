@@ -28,5 +28,6 @@ uvicorn main:app --reload --port 8000
 
 ```bash
 cd /Users/beatrizfimadacosta/RSA-QTest/frontend
+npm install
 npm run dev
 ```
