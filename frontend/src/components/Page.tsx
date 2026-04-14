@@ -12,10 +12,13 @@ type PageProps = {
   message: string;
   onMessageChange: (value: string) => void;
   validationError: string | null;
-  onImplement: () => void;
+  serverError: string | null;
+  onImplement: () => void | Promise<void>;
   implementDisabled: boolean;
+  loading: boolean;
   metrics: FactorMetrics | null;
   ciphertext: string;
+  decrypted: string;
 };
 
 export function Page({
@@ -26,10 +29,13 @@ export function Page({
   message,
   onMessageChange,
   validationError,
+  serverError,
   onImplement,
   implementDisabled,
+  loading,
   metrics,
   ciphertext,
+  decrypted,
 }: PageProps) {
   const cipherDisplay =
     ciphertext.trim().length > 0 ? ciphertext : "—";
@@ -72,6 +78,7 @@ export function Page({
             />
           </div>
           {validationError && <p className="error">{validationError}</p>}
+          {serverError && <p className="error">{serverError}</p>}
         </div>
 
         <div className="form-row form-row--cipher">
@@ -89,13 +96,11 @@ export function Page({
         <button
           type="button"
           className="btn-primary"
-          onClick={onImplement}
+          onClick={() => void onImplement()}
           disabled={implementDisabled}
         >
-          Implementar
+          {loading ? "A processar…" : "Implementar"}
         </button>
-
-        {/* TODO: estado de loading enquanto o backend processa */}
 
         {metrics && (
           <>
@@ -104,10 +109,8 @@ export function Page({
             <div className="decrypt-box">
               <h3>Descriptografia</h3>
               <p className="value">
-                {/* TODO: texto decifrado devolvido pelo backend */}
-                —
+                {decrypted.trim().length > 0 ? decrypted : "—"}
               </p>
-              
             </div>
           </>
         )}
