@@ -1,0 +1,65 @@
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.metric-card {
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.metric-card.classic {
+  border-left-color: var(--accent-classic);
+}
+
+.metric-card.quantum {
+  border-left-color: var(--accent-quantum);
+}
+
+.metric-card.brute {
+  border-left-color: var(--accent-brute);
+}
+
+.metric-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.metric-card.classic h3 {
+  color: var(--accent-classic);
+}
+
+.metric-card.quantum h3 {
+  color: var(--accent-quantum);
+}
+
+.metric-card.brute h3 {
+  color: var(--accent-brute);
+}
+
+.metric-card dl {
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+}
+
+.metric-card dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.metric-card dd {
+  margin: 0;
+  font-family: var(--mono);
+  font-weight: 500;
+}

@@ -1,0 +1,55 @@
+:root {
+  color-scheme: light;
+
+  /* Paleta (referência) */
+  --palette-sky: #82a7d9;
+  --palette-burgundy: #8c4c4c;
+  --palette-sage: #a9bf70;
+  --palette-indigo: #6370aa;
+  --palette-mauve: #854d89;
+
+  /* Semântica */
+  --bg: #eef2f9;
+  --surface: #ffffff;
+  --text: #2a2d38;
+  --muted: #5c6480;
+  --border: #c9d4e8;
+
+  --header-bg: var(--palette-indigo);
+  --header-text: #f7f8fc;
+
+  --accent-classic: var(--palette-sage);
+  --accent-quantum: var(--palette-mauve);
+  --accent-brute: var(--palette-burgundy);
+  --accent-primary: var(--palette-sky);
+
+  --radius: 12px;
+  --font: "DM Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
