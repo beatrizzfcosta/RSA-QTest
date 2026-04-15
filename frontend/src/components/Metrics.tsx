@@ -24,8 +24,6 @@ export function Metrics({ metrics }: MetricsProps) {
         <dl>
           <dt>Tempo</dt>
           <dd>{metrics.quantum.timeMs} ms</dd>
-          <dt>Operações (demo)</dt>
-          <dd>{metrics.quantum.operations}</dd>
           <dt>Custo computacional (unid.)</dt>
           <dd>{metrics.quantum.computationalCost}</dd>
         </dl>

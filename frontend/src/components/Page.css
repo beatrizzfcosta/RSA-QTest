@@ -20,6 +20,36 @@
   color: var(--palette-indigo);
 }
 
+.panel__title {
+  text-align: center;
+}
+
+.panel__inputs {
+  max-width: 33rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.panel__inputs .form-row label {
+  text-align: center;
+}
+
+.panel__inputs .hint {
+  text-align: center;
+}
+
+.panel__inputs .error {
+  text-align: center;
+}
+
+.panel__inputs .btn-primary {
+  align-self: center;
+}
+
 .form-row {
   margin-bottom: 1rem;
 }

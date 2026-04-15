@@ -43,8 +43,11 @@ export function Page({
   return (
     <main className="page">
       <section className="panel" aria-labelledby="dev-heading">
-        <h2 id="dev-heading">Experiência</h2>
+        <h2 id="dev-heading" className="panel__title">
+          Experiência
+        </h2>
 
+        <div className="panel__inputs">
         <div className="form-row">
           <label htmlFor="pq">Primos p e q</label>
           <div className="select-field">
@@ -101,6 +104,7 @@ export function Page({
         >
           {loading ? "A processar…" : "Implementar"}
         </button>
+        </div>
 
         {metrics && (
           <>

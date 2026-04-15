@@ -2,6 +2,7 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
+  LogarithmicScale,
   BarElement,
   Title,
   Tooltip,
@@ -12,6 +13,14 @@ let done = false;
 
 export function registerChartJs(): void {
   if (done) return;
-  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    LogarithmicScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+  );
   done = true;
 }
