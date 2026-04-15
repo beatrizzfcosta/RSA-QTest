@@ -25,13 +25,28 @@ def generate_keys(p: int, q: int):
 #CONVERTER TEXTO
 
 def text_to_numbers(text: str):
-    #Converte texto para lista de números (ASCII)
-    return [ord(c) for c in text]
+    numbers = []
+    for c in text.upper():
+        if c in ["\n", "\t"]:
+            continue 
 
+        if c == " ":
+            numbers.append(0) #espaço = 0
+        else:
+            #1-26 e depois reduz para caber em N
+            val = ord(c) - 64 #A=1
+            numbers.append(val % 15) #garante < 15
+
+    return numbers
 
 def numbers_to_text(numbers):
-    #Converte lista de números para texto
-    return "".join(chr(n) for n in numbers)
+    text = ""
+    for n in numbers:
+        if n == 0:
+            text += " "
+        else:
+            text += chr(n + 64)  #1: A
+    return text
 
 def chunk_message(numbers, N):
    #Garante que cada bloco m < N

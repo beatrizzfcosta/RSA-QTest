@@ -6,14 +6,22 @@ import type { PQChoice, FactorMetrics } from "./types";
 import { PQ_PAIRS } from "./constants";
 import "./App.css";
 
+type RunResponse = {
+  ciphertext: string;
+  decrypted: string;
+  metrics: FactorMetrics;
+};
+
 export default function App() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [pq, setPq] = useState<PQChoice>("3-5");
   const [message, setMessage] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [hasRun, setHasRun] = useState(false);
-  /** Preenchido quando existir cifra devolvida pela API */
   const [ciphertext, setCiphertext] = useState("");
+  const [decrypted, setDecrypted] = useState("");
+  const [metrics, setMetrics] = useState<FactorMetrics | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const n = useMemo(() => {
     const pair = PQ_PAIRS[pq];
@@ -23,14 +31,8 @@ export default function App() {
   const maxLen = n - 1;
 
   const validate = (): boolean => {
-    if (message.length === 0) {
+    if (message.trim().length === 0) {
       setValidationError("Introduza uma mensagem.");
-      return false;
-    }
-    if (message.length >= n) {
-      setValidationError(
-        `Para RSA com N = p×q = ${n}, a mensagem deve ter menos de ${n} caracteres (tem ${message.length}).`,
-      );
       return false;
     }
     setValidationError(null);
@@ -40,39 +42,54 @@ export default function App() {
   const handleMessageChange = (value: string) => {
     const clipped = value.slice(0, maxLen);
     setMessage(clipped);
-    setHasRun(false);
     setValidationError(null);
     setCiphertext("");
+    setDecrypted("");
+    setMetrics(null);
+    setServerError(null);
   };
 
-  const handleImplement = () => {
+  const handleImplement = async () => {
     if (!validate()) return;
     setCiphertext("");
-    setHasRun(true);
-    // TODO: POST /api/run; setCiphertext(res.ciphertext)
+    setDecrypted("");
+    setMetrics(null);
+    setServerError(null);
+    setLoading(true);
+    try {
+      const pair = PQ_PAIRS[pq];
+      const res = await fetch("/api/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          p: pair.p,
+          q: pair.q,
+          message,
+        }),
+      });
+      const text = await res.text();
+      if (!res.ok) {
+        let detail = text;
+        try {
+          const j = JSON.parse(text) as { detail?: unknown };
+          if (typeof j.detail === "string") detail = j.detail;
+          else if (Array.isArray(j.detail))
+            detail = j.detail.map((x) => JSON.stringify(x)).join("; ");
+        } catch {
+          /* usar texto cru */
+        }
+        throw new Error(detail || `HTTP ${res.status}`);
+      }
+      const data = JSON.parse(text) as RunResponse;
+      setCiphertext(data.ciphertext);
+      setDecrypted(data.decrypted);
+      setMetrics(data.metrics);
+    } catch (e) {
+      setServerError(e instanceof Error ? e.message : "Pedido falhou.");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const metrics = useMemo((): FactorMetrics | null => {
-    if (!hasRun) return null;
-    // TODO: substituir por resposta real do backend
-    return {
-      classic: {
-        timeMs: 0.42,
-        operations: 12,
-        computationalCost: 12,
-      },
-      quantum: {
-        timeMs: 1.85,
-        operations: "shots: 1024",
-        computationalCost: 1024,
-      },
-      brute: {
-        timeMs: 2.1,
-        operations: n,
-        computationalCost: n * n,
-      },
-    };
-  }, [hasRun, n]);
 
   return (
     <div className="app">
@@ -90,9 +107,8 @@ export default function App() {
           entre fatoração clássica, simulação quântica (Shor) e força bruta.
         </p>
         <p>
-          A mensagem deve representar um valor inferior a{" "}
-          <strong>N = p×q</strong> no esquema criptográfico; nesta demo
-          validamos o tamanho em caracteres &lt; <strong>N</strong>.
+          A codificação e validação RSA são feitas no servidor. O campo de
+          texto limita o tamanho a &lt; <strong>N = p×q</strong> caracteres.
         </p>
         <ul>
           <li>
@@ -101,7 +117,8 @@ export default function App() {
             gráficos.
           </li>
           <li>
-            Os valores mostrados são de demonstração até o backend estar ligado.
+            Métricas clássicas vêm da API; quânticas e força bruta podem ser
+            placeholders até integrar Shor e simulações completas.
           </li>
         </ul>
       </Modal>
@@ -110,20 +127,27 @@ export default function App() {
         pq={pq}
         onPqChange={(value) => {
           setPq(value);
-          setHasRun(false);
           const nextN = PQ_PAIRS[value].p * PQ_PAIRS[value].q;
           setMessage((m) => m.slice(0, nextN - 1));
           setCiphertext("");
+          setDecrypted("");
+          setMetrics(null);
+          setServerError(null);
         }}
         n={n}
         maxLen={maxLen}
         message={message}
         onMessageChange={handleMessageChange}
         validationError={validationError}
+        serverError={serverError}
         onImplement={handleImplement}
-        implementDisabled={message.length === 0 || message.length >= n}
+        implementDisabled={
+          message.trim().length === 0 || message.length >= n || loading
+        }
+        loading={loading}
         metrics={metrics}
         ciphertext={ciphertext}
+        decrypted={decrypted}
       />
     </div>
   );
