@@ -13,8 +13,17 @@ from algorithms.classical.brute_factor import factor_by_trial_division
 from algorithms.classical.rsa_experiment import run_rsa_experiment
 from algorithms.quantum.shor_wrapper import run_shor
 
-# Alinhado com scripts/test_shor.py — medição real no simulador
+# Teto de shots; para N pequenos o circuito do Shor já é grande — usar menos shots
+# mantém a demo interativa (ex.: p×q = 21) sensivelmente mais rápida.
 SHOR_SHOTS = 1024
+# N até este produto usa min(SHOR_SHOTS, SHOR_SHOTS_SMALL_N) no /api/run
+_SHOR_SMALL_N_THRESHOLD = 40
+
+
+def _shor_shots_for_n(n: int) -> int:
+    if n <= _SHOR_SMALL_N_THRESHOLD:
+        return min(SHOR_SHOTS, 256)
+    return SHOR_SHOTS
 
 app = FastAPI(title="RSA-QTest API", version="0.1.0")
 
@@ -38,11 +47,12 @@ class RunRequest(BaseModel):
 
 def _quantum_metrics(n: int) -> dict:
     """Tempo e custo reais de uma execução de Shor (simulador)."""
-    result = run_shor(n, shots=SHOR_SHOTS)
+    shots = _shor_shots_for_n(n)
+    result = run_shor(n, shots=shots)
     time_ms = float(result["time"]) * 1000.0
     return {
         "timeMs": round(time_ms, 4),
-        "computationalCost": SHOR_SHOTS,
+        "computationalCost": shots,
     }
 
 
