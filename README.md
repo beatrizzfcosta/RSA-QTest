@@ -31,7 +31,7 @@ O **RSA-QTest** é uma aplicação experimental que analisa o impacto da computa
 A plataforma permite comparar:
 
 * 🔐 Desempenho da cifragem e decifragem com RSA
-* 🧮 Métodos clássicos de fatoração
+* 🧮 Métodos clássicos de Fatorização
 * ⚛️ Abordagem quântica com o algoritmo de Shor
 
 O sistema demonstra, de forma prática e visual, como a segurança baseada na dificuldade computacional pode ser comprometida.
@@ -56,7 +56,7 @@ Quantum/Classical Processing (Qiskit + Algorithms)
 
 | Pasta | Descrição |
 |-------|-----------|
-| [`algorithms/`](algorithms/README.md) | RSA, fatoração clássica, Shor (Qiskit) — lógica partilhada |
+| [`algorithms/`](algorithms/README.md) | RSA, Fatorização clássica, Shor (Qiskit) — lógica partilhada |
 | [`backend/`](backend/README.md) | API FastAPI |
 | [`frontend/`](frontend/README.md) | React, Chart.js |
 | [`docs/`](docs/README.md) | Documentação 

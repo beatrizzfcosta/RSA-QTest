@@ -125,7 +125,7 @@ export default function App() {
             shots definido no backend.
           </li>
           <li>
-            <strong>Força bruta (fatoração clássica):</strong> tempo e número
+            <strong>Força bruta (Fatorização clássica):</strong> tempo e número
             de divisões experimentais até encontrar um fator de{" "}
             <strong>N</strong> por tentativa sistemática.
           </li>

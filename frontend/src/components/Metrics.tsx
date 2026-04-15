@@ -9,7 +9,7 @@ export function Metrics({ metrics }: MetricsProps) {
   return (
     <div className="metrics">
       <article className="metric-card classic">
-        <h3>Fatoração clássica</h3>
+        <h3>Fatorização clássica</h3>
         <dl>
           <dt>Tempo</dt>
           <dd>{metrics.classic.timeMs} ms</dd>
@@ -20,7 +20,7 @@ export function Metrics({ metrics }: MetricsProps) {
         </dl>
       </article>
       <article className="metric-card quantum">
-        <h3>Fatoração quântica</h3>
+        <h3>Fatorização quântica</h3>
         <dl>
           <dt>Tempo</dt>
           <dd>{metrics.quantum.timeMs} ms</dd>

@@ -1,4 +1,4 @@
-"""Fatoração clássica por tentativa (divisores até √N), com tempo e contagem reais."""
+"""Fatorização clássica por tentativa (divisores até √N), com tempo e contagem reais."""
 
 from __future__ import annotations
 

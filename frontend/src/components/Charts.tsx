@@ -8,8 +8,8 @@ import "./Charts.css";
 registerChartJs();
 
 const LABELS = [
-  "Fatoração clássica",
-  "Fatoração quântica",
+  "Fatorização clássica",
+  "Fatorização quântica",
   "Força bruta",
 ] as const;
 
