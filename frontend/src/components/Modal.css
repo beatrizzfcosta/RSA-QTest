@@ -12,8 +12,8 @@
 
 .modal__card {
   width: 100%;
-  max-width: 28rem;
-  max-height: min(85vh, 32rem);
+  max-width: 40rem;
+  max-height: min(90vh, 44rem);
   overflow: auto;
   background: var(--surface);
   color: var(--text);

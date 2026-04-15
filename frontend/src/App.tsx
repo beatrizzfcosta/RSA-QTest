@@ -102,25 +102,39 @@ export default function App() {
       >
         <p>
           O RSA assenta na dificuldade de fatorar números grandes. Este
-          protótipo permite escolher primos pequenos <strong>p</strong> e{" "}
-          <strong>q</strong>, definir uma mensagem curta e comparar tempos
-          entre fatoração clássica, simulação quântica (Shor) e força bruta.
+          protótipo fixa primos pequenos <strong>p</strong> e{" "}
+          <strong>q</strong> (com <strong>N = p×q</strong>), aceita uma mensagem
+          curta e, num único pedido ao servidor, devolve a cifra, o texto
+          recuperado na descriptografia e três medições independentes ligadas a{" "}
+          <strong>N</strong> e à mensagem.
         </p>
         <p>
-          A codificação e validação RSA são feitas no servidor. O campo de
-          texto limita o tamanho a &lt; <strong>N = p×q</strong> caracteres.
+          A API (<code>/api/run</code>) gera as chaves, cifra e decifra no
+          servidor e exige <code>comprimento da mensagem &lt; N</code> (o campo
+          de texto limita-se a isso). As três métricas vêm todas dessa resposta.
         </p>
         <ul>
           <li>
-            Escolha o par <strong>p</strong> e <strong>q</strong>, escreva a
-            mensagem e use <strong>Implementar</strong> para obter métricas e
-            gráficos.
+            <strong>RSA clássico (encriptação):</strong> tempo medido ao cifrar
+            a mensagem; custo em linha com o número de caracteres processados.
           </li>
           <li>
-            Métricas clássicas vêm da API; quânticas e força bruta podem ser
-            placeholders até integrar Shor e simulações completas.
+            <strong>Shor (simulador quântico):</strong> tempo de uma execução do
+            algoritmo de Shor (Qiskit) para trabalhar com o mesmo{" "}
+            <strong>N</strong>; o custo computacional corresponde ao número de
+            shots definido no backend.
+          </li>
+          <li>
+            <strong>Força bruta (fatoração clássica):</strong> tempo e número
+            de divisões experimentais até encontrar um fator de{" "}
+            <strong>N</strong> por tentativa sistemática.
           </li>
         </ul>
+        <p>
+          Escolha <strong>p</strong> e <strong>q</strong>, escreva a mensagem e
+          use <strong>Implementar</strong> para atualizar cifra, descriptografia,
+          tabela e gráficos.
+        </p>
       </Modal>
 
       <Page
