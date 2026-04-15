@@ -31,21 +31,8 @@ export default function App() {
   const maxLen = n - 1;
 
   const validate = (): boolean => {
-    if (message.length === 0) {
+    if (message.trim().length === 0) {
       setValidationError("Introduza uma mensagem.");
-      return false;
-    }
-    if (message.length >= n) {
-      setValidationError(
-        `Para RSA com N = p×q = ${n}, a mensagem deve ter menos de ${n} caracteres (tem ${message.length}).`,
-      );
-      return false;
-    }
-    const bad = [...message].find((c) => c.charCodeAt(0) >= n);
-    if (bad !== undefined) {
-      setValidationError(
-        `Cada carácter deve ter código < N (${n}). O carácter «${bad}» não é válido para este par de primos.`,
-      );
       return false;
     }
     setValidationError(null);
@@ -120,9 +107,8 @@ export default function App() {
           entre fatoração clássica, simulação quântica (Shor) e força bruta.
         </p>
         <p>
-          A mensagem deve representar um valor inferior a{" "}
-          <strong>N = p×q</strong> no esquema criptográfico; nesta demo
-          validamos o tamanho em caracteres &lt; <strong>N</strong>.
+          A codificação e validação RSA são feitas no servidor. O campo de
+          texto limita o tamanho a &lt; <strong>N = p×q</strong> caracteres.
         </p>
         <ul>
           <li>
@@ -156,7 +142,7 @@ export default function App() {
         serverError={serverError}
         onImplement={handleImplement}
         implementDisabled={
-          message.length === 0 || message.length >= n || loading
+          message.trim().length === 0 || message.length >= n || loading
         }
         loading={loading}
         metrics={metrics}

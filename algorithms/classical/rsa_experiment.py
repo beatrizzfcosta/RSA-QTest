@@ -1,5 +1,5 @@
 import time
-from rsa import generate_keys, encrypt_text, decrypt_text
+from .rsa import generate_keys, encrypt_text, decrypt_text
 
 
 def run_rsa_experiment(p: int, q: int, message: str):

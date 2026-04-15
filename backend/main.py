@@ -76,7 +76,7 @@ def run_experiment(body: RunRequest) -> dict:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
     cipher_list = out["ciphertext"]
-    ciphertext_display = ", ".join(str(x) for x in cipher_list)
+    ciphertext_display = "".join(str(x) for x in cipher_list)
 
     classic = out["metrics"]["classic"]
     quantum = _quantum_metrics(n)
