@@ -26,26 +26,29 @@ def generate_keys(p: int, q: int):
 
 def text_to_numbers(text: str):
     numbers = []
-    for c in text.upper():
+    for c in text:
         if c in ["\n", "\t"]:
             continue 
 
-        if c == " ":
-            numbers.append(0) #espaço = 0
-        else:
-            #1-26 e depois reduz para caber em N
-            val = ord(c) - 64 #A=1
-            numbers.append(val % 15) #garante < 15
+        val = ord(c)
+
+        high = val // 15
+        low = val % 15
+
+        numbers.append(high)
+        numbers.append(low)
 
     return numbers
 
 def numbers_to_text(numbers):
     text = ""
-    for n in numbers:
-        if n == 0:
-            text += " "
-        else:
-            text += chr(n + 64)  #1: A
+    for i in range(0, len(numbers), 2):
+        high = numbers[i]
+        low = numbers[i + 1]
+
+        val = high * 15 + low
+        text += chr(val)
+
     return text
 
 def chunk_message(numbers, N):
