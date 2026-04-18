@@ -1,6 +1,7 @@
 import math
 import random
 from fractions import Fraction
+from time import perf_counter
 
 from qiskit.circuit import ClassicalRegister, QuantumRegister
 from qiskit.circuit.library import QFTGate
@@ -132,7 +133,7 @@ def find_order(
     precision: int | None = None,
     num_shots: int = 10,
     one_control_circuit: bool = False,
-) -> tuple[int, dict[str, int]]:
+) -> tuple[int, dict[str, int], dict[str, float]]:
     """
     Carry out search algorithm for fnding the order of the integer A in Z_N, i.e. the
     integer r such that A^r = 1 mod N, on a simulator.
@@ -144,29 +145,36 @@ def find_order(
         num_shots: Number of circuit sampling runs. Default value: 10.
         one_control_circuit: boolean. Use order finding circuit with a single control qubit. Default value: False.
     Returns:
-        tuple[int, dict[str, int]]: The first element is the order (if found) or zero (if not). The second
-                                    element is the distribution of the measurement outcomes.
     """
     m = precision if precision is not None else 2 * math.ceil(math.log2(N))
+    t0 = perf_counter()
     if one_control_circuit:
         qc = order_finding_circuit_one_control(A, N, precision=m)
     else:
         qc = order_finding_circuit(A, N, precision=m)
+    t1 = perf_counter()
     qc_isa = pass_manager.run(qc)
+    t2 = perf_counter()
 
     print(f"Start search for the order of {A} in Z_{N}")
 
     # Execução compatível com StatevectorSampler
     job = sampler.run([qc_isa], shots=num_shots)
     result = job.result()
-    pub_result = result[0] # Aceder ao primeiro (e único) PUB result
+    pub_result = result[0]  # Aceder ao primeiro (e único) PUB result
     dist = pub_result.data.output_bits.get_counts()
+    t3 = perf_counter()
 
-    #Antigo:
-    #dist = sampler.run([qc_isa], shots=num_shots).result()[0].data.output_bits.get_counts()
-    
     r = _get_order_from_dist(dist, A, N, precision=m)
-    return r, dist
+    t4 = perf_counter()
+
+    phases_ms = {
+        "circuitBuildMs": round((t1 - t0) * 1000, 4),
+        "transpileMs": round((t2 - t1) * 1000, 4),
+        "sampleMs": round((t3 - t2) * 1000, 4),
+        "orderInferenceMs": round((t4 - t3) * 1000, 4),
+    }
+    return r, dist, phases_ms
 
 
 def find_factor(
@@ -215,7 +223,7 @@ def find_factor(
             print(f"Lucky guess of {a}, found factor {d}")
             return d
         # Run order finding circuit
-        r, _ = find_order(
+        r, _, _ = find_order(
             a,
             N,
             sampler,

@@ -12,6 +12,7 @@ using Qiskit simulators.
 
 import time
 import math
+from time import perf_counter
 from qiskit.primitives import StatevectorSampler
 from qiskit.transpiler import PassManager
 
@@ -47,13 +48,13 @@ def run_shor(N: int, A: int = None, shots: int = 100):
 
     try:
         # Step 1: Find order r
-        order, distribution = find_order(
+        order, distribution, phases_ms = find_order(
             A,
             N,
             sampler,
             pass_manager,
             num_shots=shots,
-            one_control_circuit=False
+            one_control_circuit=False,
         )
 
         # Step 2: Compute factors (classical part)
@@ -65,11 +66,14 @@ def run_shor(N: int, A: int = None, shots: int = 100):
                 "factor": None,
                 "time": time.time() - start_time,
                 "success": False,
-                "error": "Invalid order (None or odd)"
+                "error": "Invalid order (None or odd)",
+                "shorPhasesMs": {**phases_ms, "classicalFactorMs": 0.0},
             }
 
+        t_classical_0 = perf_counter()
         factor1 = math.gcd(pow(A, order // 2) - 1, N)
         factor2 = math.gcd(pow(A, order // 2) + 1, N)
+        classical_factor_ms = round((perf_counter() - t_classical_0) * 1000, 4)
 
         # Validate factors
         if factor1 in [1, N] and factor2 in [1, N]:
@@ -86,7 +90,8 @@ def run_shor(N: int, A: int = None, shots: int = 100):
             "factor": factor,
             "time": time.time() - start_time,
             "success": success,
-            "distribution": distribution
+            "distribution": distribution,
+            "shorPhasesMs": {**phases_ms, "classicalFactorMs": classical_factor_ms},
         }
 
     except Exception as e:
@@ -96,5 +101,6 @@ def run_shor(N: int, A: int = None, shots: int = 100):
             "factor": None,
             "time": time.time() - start_time,
             "success": False,
-            "error": str(e)
+            "error": str(e),
+            "shorPhasesMs": {},
         }
