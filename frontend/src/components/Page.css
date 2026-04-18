@@ -4,6 +4,8 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .panel {
@@ -12,6 +14,10 @@
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
   box-shadow: 0 1px 3px color-mix(in srgb, var(--palette-indigo) 12%, transparent);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .panel h2 {
@@ -34,6 +40,10 @@
   align-items: stretch;
 }
 
+.panel__inputs--split {
+  max-width: 52rem;
+}
+
 .panel__inputs .form-row label {
   text-align: center;
 }
@@ -48,10 +58,7 @@
 
 .panel__inputs .btn-primary {
   align-self: center;
-}
-
-.form-row {
-  margin-bottom: 1rem;
+  margin-top: 1.5rem;
 }
 
 .form-row label {
@@ -109,6 +116,7 @@
 
 .form-row--cipher {
   margin-bottom: 1.25rem;
+  margin-top: 1.25rem;
 }
 
 .cipher-field {
@@ -283,4 +291,207 @@
   font-size: 0.75rem;
   color: color-mix(in srgb, var(--palette-mauve) 75%, var(--muted));
   font-family: var(--mono);
+}
+
+.pq-pair-grid {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+  width: 100%;
+  max-width: 33rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 640px) {
+  .pq-pair-grid {
+    grid-template-columns: 1fr 1fr;
+    max-width: 42rem;
+  }
+}
+
+.hint--fullwidth {
+  text-align: center;
+  max-width: 20rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cipher-dual-grid {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 720px) {
+  .cipher-dual-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.cipher-dual-grid .cipher-field {
+  max-width: none;
+}
+
+.case-results {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.case-panel {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.case-panel__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  color: var(--palette-indigo);
+  text-align: center;
+}
+
+.case-panel__n {
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.experimento-grid {
+  display: grid;
+  gap: 1.25rem;
+  align-items: stretch;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .experimento-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.experimento-col {
+  min-width: 0;
+}
+
+/* Teste 1: espaço acima no conteúdo. Teste 2: margem fora do retângulo (painel / cartão). */
+.experimento-grid > .experimento-col:first-child {
+  padding-top: 1rem;
+}
+
+.experimento-col--aside {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  min-height: 0;
+}
+
+.add-test-card {
+  box-sizing: border-box;
+  width: auto;
+  min-height: 10rem;
+  margin: 1rem 1rem 0;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  font: inherit;
+  color: var(--palette-indigo);
+  background: color-mix(in srgb, var(--palette-sky) 8%, var(--surface));
+  border: 2px dashed color-mix(in srgb, var(--palette-indigo) 38%, var(--border));
+  border-radius: var(--radius);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.15s ease;
+}
+
+@media (min-width: 768px) {
+  .add-test-card {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .second-test-panel {
+    flex: 1;
+    min-height: 0;
+  }
+}
+
+.add-test-card:hover {
+  border-color: color-mix(in srgb, var(--palette-indigo) 55%, var(--border));
+  background: color-mix(in srgb, var(--palette-sky) 14%, var(--surface));
+}
+
+.add-test-card:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--palette-sky) 45%, transparent);
+}
+
+.add-test-card__plus {
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.add-test-card__label {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.second-test-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0.5rem 0rem 0;
+  padding: 0.5rem 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--palette-indigo) 22%, var(--border));
+  background: color-mix(in srgb, var(--palette-sky) 6%, var(--surface));
+}
+
+.second-test-panel .select-field,
+.second-test-panel .message-field,
+.second-test-panel .cipher-field {
+  max-width: none;
+}
+
+.second-test-panel__sync-hint {
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--palette-indigo) 6%, transparent);
+}
+
+.btn-text {
+  margin-top: 0.5rem;
+  align-self: center;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--palette-mauve);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-text:hover {
+  color: color-mix(in srgb, var(--palette-mauve) 75%, #000);
 }

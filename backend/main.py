@@ -50,10 +50,14 @@ def _quantum_metrics(n: int) -> dict:
     shots = _shor_shots_for_n(n)
     result = run_shor(n, shots=shots)
     time_ms = float(result["time"]) * 1000.0
-    return {
+    out: dict = {
         "timeMs": round(time_ms, 4),
         "computationalCost": shots,
     }
+    phases = result.get("shorPhasesMs")
+    if isinstance(phases, dict) and phases:
+        out["shorPhasesMs"] = phases
+    return out
 
 
 def _brute_metrics(n: int) -> dict:

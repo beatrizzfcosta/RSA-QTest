@@ -1,33 +1,131 @@
 .charts-section {
   margin-top: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .charts-section__title {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  color: var(--palette-indigo);
+  margin: 0 0 0.85rem;
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 .charts-section__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.15rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
   .charts-section__grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 }
 
 .chart-wrap {
-  padding: 0.75rem;
-  border: 1px dashed color-mix(in srgb, var(--palette-indigo) 30%, var(--border));
+  padding: 1rem 1.1rem 1.05rem;
+  border: 1px solid rgba(100, 116, 139, 0.2);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: linear-gradient(
+    165deg,
+    #ffffff 0%,
+    color-mix(in srgb, var(--palette-sky) 6%, #ffffff) 100%
+  );
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 10px 28px rgba(15, 23, 42, 0.07);
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .chart-inner {
   position: relative;
   height: 260px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chart-inner canvas {
+  max-width: 100% !important;
+}
+
+.chart-inner--tall {
+  height: 300px;
+}
+
+.charts-section--shor-phases {
+  margin-top: 1.25rem;
+}
+
+.charts-section--shor-pipeline-compare {
+  margin-top: 1.75rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.chart-wrap--pipeline-compare {
+  margin-top: 0.35rem;
+}
+
+.chart-inner--pipeline-compare {
+  height: 340px;
+}
+
+.charts-section__phase-note {
+  margin: 0 0 0.65rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: center;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.charts-section--compare {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(100, 116, 139, 0.22);
+}
+
+.charts-section__legend-hint {
+  margin: 0 0 1rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.charts-section__legend-hint .swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  vertical-align: middle;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.charts-section__legend-hint .swatch--a {
+  background: rgba(95, 62, 118, 0.92);
+}
+
+.charts-section__legend-hint .swatch--b {
+  background: rgba(55, 85, 145, 0.92);
 }

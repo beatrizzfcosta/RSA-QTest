@@ -14,22 +14,10 @@ import "./Charts.css";
 
 registerChartJs();
 
-const LABELS = [
+const METHOD_LABELS = [
   "Fatorização clássica",
   "Fatorização quântica",
   "Força bruta",
-] as const;
-
-const BAR_BG = [
-  SERIES_COLORS.classic.bg,
-  SERIES_COLORS.quantum.bg,
-  SERIES_COLORS.brute.bg,
-] as const;
-
-const BAR_HOVER = [
-  SERIES_COLORS.classic.hover,
-  SERIES_COLORS.quantum.hover,
-  SERIES_COLORS.brute.hover,
 ] as const;
 
 const MIN_LOG_COST = 1e-9;
@@ -46,7 +34,6 @@ function formatCostValue(v: number): string {
   return v.toFixed(2);
 }
 
-/** Rótulos do eixo de custo: potências de 10 (dados em log₁₀ no eixo linear). */
 function tickLabelCostFromLog10Power(p: number): string {
   const v = 10 ** p;
   if (!Number.isFinite(v)) return "";
@@ -67,56 +54,106 @@ function log10AxisRange(logValues: number[]): { min: number; max: number } {
   return { min: yMin, max: yMax };
 }
 
-type FactorChartsProps = {
-  metrics: FactorMetrics;
-  /** Título da secção (por defeito: "Resultados"). */
+type FactorChartsCompareProps = {
+  metricsA: FactorMetrics;
+  metricsB: FactorMetrics;
+  legendA: string;
+  legendB: string;
   sectionTitle?: string;
 };
 
-export function FactorCharts({ metrics, sectionTitle = "Resultados" }: FactorChartsProps) {
+export function FactorChartsCompare({
+  metricsA,
+  metricsB,
+  legendA,
+  legendB,
+  sectionTitle = "Comparação — desempenho por método",
+}: FactorChartsCompareProps) {
+  const timeRawA = useMemo(
+    () =>
+      [
+        metricsA.classic.timeMs,
+        metricsA.quantum.timeMs,
+        metricsA.brute.timeMs,
+      ] as const,
+    [metricsA],
+  );
+  const timeRawB = useMemo(
+    () =>
+      [
+        metricsB.classic.timeMs,
+        metricsB.quantum.timeMs,
+        metricsB.brute.timeMs,
+      ] as const,
+    [metricsB],
+  );
+
+  const costRawA = useMemo(
+    () =>
+      [
+        metricsA.classic.computationalCost,
+        metricsA.quantum.computationalCost,
+        metricsA.brute.computationalCost,
+      ] as const,
+    [metricsA],
+  );
+  const costRawB = useMemo(
+    () =>
+      [
+        metricsB.classic.computationalCost,
+        metricsB.quantum.computationalCost,
+        metricsB.brute.computationalCost,
+      ] as const,
+    [metricsB],
+  );
+
   const costScale = useMemo(() => {
-    const raw = [
-      metrics.classic.computationalCost,
-      metrics.quantum.computationalCost,
-      metrics.brute.computationalCost,
-    ];
-    const log = raw.map((v) => Math.log10(Math.max(v, MIN_LOG_COST)));
-    const { min: yMin, max: yMax } = log10AxisRange(log);
-    return { raw, log, yMin, yMax };
-  }, [metrics]);
+    const logA = costRawA.map((v) => Math.log10(Math.max(v, MIN_LOG_COST)));
+    const logB = costRawB.map((v) => Math.log10(Math.max(v, MIN_LOG_COST)));
+    const { min: yMin, max: yMax } = log10AxisRange([...logA, ...logB]);
+    return { logA, logB, yMin, yMax };
+  }, [costRawA, costRawB]);
 
-  const timeData = useMemo(() => {
-    const raw = [
-      metrics.classic.timeMs,
-      metrics.quantum.timeMs,
-      metrics.brute.timeMs,
-    ];
-    return {
-      labels: [...LABELS],
-      datasets: [
-        {
-          label: "Tempo (ms)",
-          data: timeMsBarValues(raw, true),
-          backgroundColor: [...BAR_BG],
-          hoverBackgroundColor: [...BAR_HOVER],
-        },
-      ],
-    };
-  }, [metrics]);
-
-  const costData = useMemo(
+  const timeData = useMemo(
     () => ({
-      labels: [...LABELS],
+      labels: [...METHOD_LABELS],
       datasets: [
         {
-          label: "Custo computacional",
-          data: costScale.log,
-          backgroundColor: [...BAR_BG],
-          hoverBackgroundColor: [...BAR_HOVER],
+          label: legendA,
+          data: timeMsBarValues([...timeRawA], true),
+          backgroundColor: SERIES_COLORS.compareA.bg,
+          hoverBackgroundColor: SERIES_COLORS.compareA.hover,
+        },
+        {
+          label: legendB,
+          data: timeMsBarValues([...timeRawB], true),
+          backgroundColor: SERIES_COLORS.compareB.bg,
+          hoverBackgroundColor: SERIES_COLORS.compareB.hover,
         },
       ],
     }),
-    [costScale.log],
+    [legendA, legendB, timeRawA, timeRawB],
+  );
+
+  const costData = useMemo(
+    () => ({
+      labels: [...METHOD_LABELS],
+      datasets: [
+        {
+          label: legendA,
+          data: costScale.logA,
+          backgroundColor: SERIES_COLORS.compareA.bg,
+          hoverBackgroundColor: SERIES_COLORS.compareA.hover,
+        },
+        {
+          label: legendB,
+          data: costScale.logB,
+          backgroundColor: SERIES_COLORS.compareB.bg,
+          hoverBackgroundColor: SERIES_COLORS.compareB.hover,
+        },
+      ],
+    }),
+    [legendA, legendB, costScale.logA, costScale.logB],
   );
 
   const timeOptions = useMemo<ChartOptions<"bar">>(
@@ -126,25 +163,29 @@ export function FactorCharts({ metrics, sectionTitle = "Resultados" }: FactorCha
       animation: { duration: 450 },
       datasets: {
         bar: {
-          categoryPercentage: 0.78,
-          barPercentage: 0.62,
+          categoryPercentage: 0.68,
+          barPercentage: 0.82,
         },
       },
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: true,
+          position: "bottom",
+        },
         title: chartTitlePrimary("Tempo de execução por método"),
-        subtitle: chartSubtitle("Eixo Y em escala logarítmica (ms)."),
+        subtitle: chartSubtitle(
+          "Duas barras por método; eixo Y em escala logarítmica (ms).",
+        ),
         tooltip: {
           callbacks: {
             label: (ctx) => {
               const i = ctx.dataIndex;
-              const v = [
-                metrics.classic.timeMs,
-                metrics.quantum.timeMs,
-                metrics.brute.timeMs,
-              ][i] ?? 0;
-              return `${ctx.label}: ${formatTimeMs(v)} ms`;
+              const raw =
+                ctx.datasetIndex === 0 ? timeRawA[i] : timeRawB[i];
+              if (raw === undefined) return "";
+              return `${ctx.dataset.label}: ${formatTimeMs(raw)} ms`;
             },
+            title: (items) => items[0]?.label ?? "",
           },
         },
       },
@@ -169,14 +210,14 @@ export function FactorCharts({ metrics, sectionTitle = "Resultados" }: FactorCha
           ticks: {
             color: CHART_AXIS.tick,
             font: { size: CHART_AXIS.tickFontSize },
-            maxRotation: 28,
+            maxRotation: 24,
           },
           grid: { display: false },
           border: { display: false },
         },
       },
     }),
-    [metrics],
+    [timeRawA, timeRawB],
   );
 
   const costOptions = useMemo<ChartOptions<"bar">>(
@@ -186,22 +227,28 @@ export function FactorCharts({ metrics, sectionTitle = "Resultados" }: FactorCha
       animation: { duration: 450 },
       datasets: {
         bar: {
-          categoryPercentage: 0.78,
-          barPercentage: 0.62,
+          categoryPercentage: 0.68,
+          barPercentage: 0.82,
         },
       },
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: true,
+          position: "bottom",
+        },
         title: chartTitlePrimary("Custo computacional"),
         subtitle: chartSubtitle(
-          "Eixo Y: log₁₀ das unidades (operações / shots)",
+          "Duas barras por método; eixo Y = log₁₀ das unidades",
         ),
         tooltip: {
           callbacks: {
+            title: (items) => items[0]?.label ?? "",
             label: (ctx) => {
               const i = ctx.dataIndex;
-              const v = costScale.raw[i] ?? 0;
-              return `${ctx.label}: ${formatCostValue(v)} unid.`;
+              const raw =
+                ctx.datasetIndex === 0 ? costRawA[i] : costRawB[i];
+              if (raw === undefined) return "";
+              return `${ctx.dataset.label}: ${formatCostValue(raw)} unid.`;
             },
           },
         },
@@ -232,14 +279,14 @@ export function FactorCharts({ metrics, sectionTitle = "Resultados" }: FactorCha
           ticks: {
             color: CHART_AXIS.tick,
             font: { size: CHART_AXIS.tickFontSize },
-            maxRotation: 28,
+            maxRotation: 24,
           },
           grid: { display: false },
           border: { display: false },
         },
       },
     }),
-    [costScale],
+    [costScale.yMin, costScale.yMax, costRawA, costRawB],
   );
 
   return (
