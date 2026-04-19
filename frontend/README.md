@@ -25,7 +25,7 @@ Interface do **RSA-QTest**: vista de desenvolvimento (parâmetros e resultados);
 ## Comandos
 
 ```bash
-cd /Users/beatrizfimadacosta/RSA-QTest/frontend
+cd frontend
 npm install
 npm run dev
 ```
@@ -35,7 +35,7 @@ Abrir o URL indicado no terminal (por defeito `http://localhost:5173`).
 Build de produção:
 
 ```bash
-cd /Users/beatrizfimadacosta/RSA-QTest/frontend
+cd frontend
 npm run build
 npm run preview
 ```
