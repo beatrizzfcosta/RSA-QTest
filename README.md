@@ -74,7 +74,7 @@ Cada pasta inclui um **README** com tarefas de implementação e **comandos** su
 
 ---
 
-## 1. Interface Interativa e Overview
+### 1. Interface Interativa e Overview
 A solução apresenta uma interface interativa que permite configurar parâmetros RSA ($p$ e $q$) e mensagens personalizadas para testar a pipeline de criptoanálise.
 
 ![RSA-QTest Overview](resultados/overview.png)
@@ -82,7 +82,7 @@ A solução apresenta uma interface interativa que permite configurar parâmetro
 
 ---
 
-## 2. Teste de Impacto: Variação da Mensagem
+### 2. Teste de Impacto: Variação da Mensagem
 Neste cenário, manteve-se o valor de **N fixo (N=15)**, variando apenas o conteúdo da mensagem para analisar a sensibilidade do algoritmo ao tamanho do input clássico.
 
 ### 2.1 Configuração do Teste
@@ -103,7 +103,7 @@ Observa-se que para o mesmo valor de N, o custo computacional em termos de simul
 
 ---
 
-## 3. Teste de Impacto: Tamanho da Chave ($N$)
+### 3. Teste de Impacto: Tamanho da Chave ($N$)
 De forma a avaliar a escalabilidade, comparou-se a fatorização de **N=15** ($4$ bits) contra **N=21** ($5$ bits).
 
 ### 3.1 Configuração da Experiência
@@ -130,7 +130,7 @@ Verificação final da decifragem bem-sucedida comparando os três métodos: Fat
 
 ---
 
-## 4. Análise de Escalabilidade e Limitações Quânticas
+### 4. Análise de Escalabilidade e Limitações Quânticas
 
 ### 4.1 Extrapolação da Ameaça Quântica
 Comparação entre a fatorização clássica (exponencial) e o algoritmo de Shor (polinomial) para chaves RSA de dimensão real.
