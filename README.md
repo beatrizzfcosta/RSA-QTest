@@ -146,6 +146,6 @@ O algoritmo de Shor depende da amostragem estatística para identificar o perío
 ![Taxa de Sucesso](resultados/success_rate.png)
 *Figura 10: Impacto do número de Shots na Taxa de Sucesso (N=15).*
 
-**Análise:** O sistema atinge estabilidade total (100% de sucesso) a partir dos **32 shots**. Valores inferiores resultam em incerteza estatística, onde a resposta correta não é distinguível do ruído.
+**Análise:** O sistema atinge estabilidade total (100% de sucesso) a partir dos **8 shots**. Valores inferiores resultam em incerteza estatística, onde a resposta correta não é distinguível do ruído.
 
 ---
